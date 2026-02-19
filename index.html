@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Academic Journal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f7f3ed;
+    --cream-dark: #ede8df;
+    --beige: #d9cfc0;
+    --beige-mid: #c4b69e;
+    --brown: #5c4033;
+    --brown-light: #8b6651;
+    --brown-mid: #7a5545;
+    --sage: #8a9e88;
+    --sage-light: #b5c5b3;
+    --sage-pale: #e8ede8;
+    --text-dark: #3a2e26;
+    --text-mid: #6b5548;
+    --text-light: #9a8578;
+    --white: #fdfaf6;
+    --shadow: rgba(92,64,51,0.08);
+    --shadow-md: rgba(92,64,51,0.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--cream);
+    font-family: 'Lato', sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(138,158,136,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(217,207,192,0.3) 0%, transparent 50%);
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--beige);
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px var(--shadow);
+  }
+
+  .header-left h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.85rem;
+    font-weight: 600;
+    color: var(--brown);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .header-left h1 em {
+    font-style: italic;
+    color: var(--brown-light);
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .header-date {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    letter-spacing: 0.02em;
+  }
+
+  .header-day {
+    font-size: 0.75rem;
+    color: var(--beige-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* ── MAIN GRID ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+  }
+
+  /* ── CARD BASE ── */
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 1px solid var(--cream-dark);
+    box-shadow: 0 4px 24px var(--shadow);
+    overflow: hidden;
+    transition: box-shadow 0.25s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 32px var(--shadow-md);
+  }
+
+  .card-header {
+    padding: 1.4rem 1.75rem 1rem;
+    border-bottom: 1px solid var(--cream-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .card-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--brown);
+  }
+
+  .card-header .card-subtitle {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .card-body {
+    padding: 1.25rem 1.75rem 1.5rem;
+  }
+
+  /* ── CARD 1: SCHEDULE ── */
+  #card-schedule { grid-column: 1; grid-row: 1; }
+
+  .schedule-icon { background: var(--sage-pale); color: var(--sage); }
+
+  .schedule-empty {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--text-light);
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 1.5rem 0;
+  }
+
+  .schedule-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--cream-dark);
+    transition: background 0.2s;
+  }
+
+  .schedule-item:last-child { border-bottom: none; }
+
+  .schedule-time {
+    font-size: 0.72rem;
+    color: var(--text-light);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    min-width: 90px;
+    padding-top: 2px;
+    font-family: 'Lato', sans-serif;
+  }
+
+  .schedule-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sage);
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+
+  .schedule-name {
+    font-size: 0.92rem;
+    color: var(--text-dark);
+    line-height: 1.4;
+    font-weight: 400;
+  }
+
+  /* ── CARD 2: MISSION POOL ── */
+  #card-mission { grid-column: 2; grid-row: 1 / 3; }
+
+  .mission-icon { background: #f5eee8; color: var(--brown-light); }
+
+  .mission-limit-info {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    margin-bottom: 1.1rem;
+    font-style: italic;
+  }
+
+  .mission-limit-info span {
+    color: var(--brown);
+    font-weight: 700;
+    font-style: normal;
+  }
+
+  .mission-category {
+    margin-bottom: 1.1rem;
+  }
+
+  .category-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--beige-mid);
+    font-weight: 700;
+    margin-bottom: 0.45rem;
+    padding-left: 2px;
+  }
+
+  .mission-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s, opacity 0.18s;
+    user-select: none;
+    margin-bottom: 2px;
+  }
+
+  .mission-item:hover:not(.disabled) {
+    background: var(--cream-dark);
+  }
+
+  .mission-item.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .mission-item.checked {
+    background: var(--sage-pale);
+    opacity: 1 !important;
+  }
+
+  .mission-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--beige-mid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.18s;
+    background: var(--white);
+  }
+
+  .mission-item.checked .mission-check {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+
+  .mission-check svg {
+    width: 10px;
+    height: 10px;
+    stroke: white;
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+
+  .mission-item.checked .mission-check svg { opacity: 1; }
+
+  .mission-label {
+    font-size: 0.88rem;
+    color: var(--text-mid);
+    line-height: 1.3;
+  }
+
+  .mission-item.checked .mission-label {
+    color: var(--brown);
+    font-weight: 400;
+  }
+
+  /* ── CARD 3: SUMMARY ── */
+  #card-summary { grid-column: 1; grid-row: 2; }
+
+  .summary-icon { background: #f0ede8; color: var(--brown); }
+
+  .summary-count {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 600;
+    color: var(--brown);
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+
+  .summary-count span {
+    font-size: 1.2rem;
+    color: var(--beige-mid);
+    font-weight: 400;
+  }
+
+  .summary-label {
+    font-size: 0.78rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.2rem;
+    font-weight: 700;
+  }
+
+  .progress-track {
+    height: 6px;
+    background: var(--cream-dark);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--sage-light), var(--sage));
+    transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    width: 0%;
+  }
+
+  .summary-status {
+    display: inline-block;
+    padding: 0.3rem 0.85rem;
+    border-radius: 99px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .status-light { background: var(--cream-dark); color: var(--text-light); }
+  .status-productive { background: var(--sage-pale); color: var(--sage); }
+  .status-excellent { background: #f5eee8; color: var(--brown-light); }
+
+  /* ── CARD 4: WEEKLY REPORT ── */
+  #card-weekly { grid-column: 1 / 3; }
+
+  .weekly-icon { background: #f0ede8; color: var(--brown-mid); }
+
+  .collapsible-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+    font-size: 0.8rem;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0;
+    margin-left: auto;
+    transition: color 0.2s;
+  }
+
+  .collapsible-toggle:hover { color: var(--brown); }
+
+  .toggle-arrow {
+    transition: transform 0.28s ease;
+    font-size: 0.65rem;
+  }
+
+  .collapsible-toggle.open .toggle-arrow { transform: rotate(180deg); }
+
+  .weekly-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .weekly-stat {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--cream-dark);
+  }
+
+  .weekly-stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--brown);
+    line-height: 1.1;
+  }
+
+  .weekly-stat-label {
+    font-size: 0.7rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    margin-top: 0.2rem;
+  }
+
+  .weekly-section-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--beige-mid);
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+  }
+
+  /* bar chart */
+  .bar-chart { margin-bottom: 1.5rem; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .bar-label {
+    font-size: 0.78rem;
+    color: var(--text-mid);
+    min-width: 70px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 20px;
+    background: var(--cream-dark);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--beige-mid), var(--brown-light));
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 6px;
+    font-size: 0.68rem;
+    color: white;
+    font-weight: 700;
+    min-width: 8px;
+    transition: width 0.8s cubic-bezier(0.34,1.2,0.64,1);
+  }
+
+  .bar-fill.is-zero { background: var(--cream-dark); }
+
+  .weekly-text-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 2rem; }
+
+  .wts-item { display: flex; flex-direction: column; gap: 0.15rem; }
+
+  .wts-key {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-light);
+    font-weight: 700;
+  }
+
+  .wts-val {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    font-weight: 400;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+  }
+
+  .collapsible-body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s ease;
+  }
+
+  .collapsible-body.open { max-height: 900px; }
+
+  /* streak badge */
+  .streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: linear-gradient(135deg, #f5eee8, #ede4d8);
+    border: 1px solid var(--beige);
+    border-radius: 99px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.78rem;
+    color: var(--brown-mid);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+  }
+
+  .streak-fire { font-size: 0.9rem; }
+
+  /* divider */
+  .divider {
+    height: 1px;
+    background: var(--cream-dark);
+    margin: 1.25rem 0;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--beige); border-radius: 99px; }
+
+  @media (max-width: 720px) {
+    main { grid-template-columns: 1fr; }
+    #card-mission { grid-column: 1; grid-row: auto; }
+    #card-weekly { grid-column: 1; }
+    .weekly-grid { grid-template-columns: repeat(2, 1fr); }
+    .weekly-text-stats { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-left">
+    <h1>Weekly <em>Academic</em> Journal</h1>
+  </div>
+  <div class="header-right">
+    <div class="header-date" id="headerDate"></div>
+    <div class="header-day" id="headerDay"></div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main>
+
+  <!-- Card 1: Today's Schedule -->
+  <div class="card" id="card-schedule">
+    <div class="card-header">
+      <div class="card-icon schedule-icon">📅</div>
+      <div>
+        <h2>Today's Schedule</h2>
+        <div class="card-subtitle">Jadwal hari ini</div>
+      </div>
+    </div>
+    <div class="card-body" id="scheduleBody"></div>
+  </div>
+
+  <!-- Card 2: Mission Pool -->
+  <div class="card" id="card-mission">
+    <div class="card-header">
+      <div class="card-icon mission-icon">✦</div>
+      <div>
+        <h2>Mission Pool</h2>
+        <div class="card-subtitle">Pilih maks. 5 aktivitas</div>
+      </div>
+    </div>
+    <div class="card-body" id="missionBody"></div>
+  </div>
+
+  <!-- Card 3: Today's Summary -->
+  <div class="card" id="card-summary">
+    <div class="card-header">
+      <div class="card-icon summary-icon">◈</div>
+      <div>
+        <h2>Today's Summary</h2>
+        <div class="card-subtitle">Ringkasan harian</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="summary-count"><span id="summaryCount">0</span> <span>/ 5</span></div>
+      <div class="summary-label">aktivitas dipilih</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="summary-status status-light" id="summaryStatus">Light Day</div>
+    </div>
+  </div>
+
+  <!-- Card 4: Weekly Report -->
+  <div class="card" id="card-weekly">
+    <div class="card-header">
+      <div class="card-icon weekly-icon">📊</div>
+      <div>
+        <h2>Weekly Report</h2>
+        <div class="card-subtitle">7 hari terakhir</div>
+      </div>
+      <button class="collapsible-toggle" id="weeklyToggle">
+        Expand <span class="toggle-arrow">▾</span>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="collapsible-body" id="weeklyBody"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ──────────────────────────────────────────
+// DATA
+// ──────────────────────────────────────────
+
+const DAYS_ID = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const MONTHS_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+const SCHEDULE = {
+  1: [ // Senin
+    { time: '07:30–10:50', name: 'Proyek Aplikasi Dasar' }
+  ],
+  2: [ // Selasa
+    { time: '07:30–11:40', name: 'Sistem Terdistribusi' },
+    { time: '12:30–16:20', name: 'Desain Pengalaman Pengguna' }
+  ],
+  3: [ // Rabu
+    { time: '07:30–09:10', name: 'Manajemen Proyek' },
+    { time: '09:10–10:50', name: 'Bahasa Indonesia' }
+  ],
+  4: [ // Kamis
+    { time: '07:30–09:10', name: 'Keamanan Perangkat Lunak' },
+    { time: '12:30–16:20', name: 'Analisis dan Desain Perangkat Lunak' }
+  ],
+  5: [ // Jumat
+    { time: '09:10–10:50', name: 'Pendidikan Agama' }
+  ]
+};
+
+const MISSIONS = [
+  {
+    category: 'Fitness',
+    items: ['Gym Upper', 'Gym Lower', 'Cardio', 'Stretching']
+  },
+  {
+    category: 'Akademik',
+    items: ['Deep Work 2 Jam', 'Review Materi', 'Kerjakan Tugas', 'Baca 10 Halaman']
+  },
+  {
+    category: 'Kreatif',
+    items: ['Latihan Scale', 'Belajar Lagu', 'Recording']
+  },
+  {
+    category: 'Mental',
+    items: ['Journaling', 'Meditasi', 'No PMO']
+  },
+  {
+    category: 'Spiritual',
+    items: ['Sholat Tepat Waktu', 'Baca Quran', 'Dzikir']
+  }
+];
+
+const MAX_MISSIONS = 5;
+
+// ──────────────────────────────────────────
+// HELPERS
+// ──────────────────────────────────────────
+
+function todayKey() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+
+function dateKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,'0');
+  const d = String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+
+function loadDay(key) {
+  const raw = localStorage.getItem(`journal_${key}`);
+  return raw ? JSON.parse(raw) : { checked: [] };
+}
+
+function saveDay(key, data) {
+  localStorage.setItem(`journal_${key}`, JSON.stringify(data));
+}
+
+// ──────────────────────────────────────────
+// HEADER
+// ──────────────────────────────────────────
+
+function renderHeader() {
+  const now = new Date();
+  const day = DAYS_ID[now.getDay()];
+  const date = now.getDate();
+  const month = MONTHS_ID[now.getMonth()];
+  const year = now.getFullYear();
+
+  document.getElementById('headerDate').textContent = `${date} ${month} ${year}`;
+  document.getElementById('headerDay').textContent = day;
+}
+
+// ──────────────────────────────────────────
+// SCHEDULE
+// ──────────────────────────────────────────
+
+function renderSchedule() {
+  const dayOfWeek = new Date().getDay(); // 0=Sun
+  const classes = SCHEDULE[dayOfWeek];
+  const body = document.getElementById('scheduleBody');
+
+  if (!classes || classes.length === 0) {
+    body.innerHTML = `<div class="schedule-empty">Tidak ada kelas hari ini.<br><em>Rest & recharge.</em></div>`;
+    return;
+  }
+
+  body.innerHTML = classes.map(c => `
+    <div class="schedule-item">
+      <div class="schedule-time">${c.time}</div>
+      <div class="schedule-dot"></div>
+      <div class="schedule-name">${c.name}</div>
+    </div>
+  `).join('');
+}
+
+// ──────────────────────────────────────────
+// MISSIONS
+// ──────────────────────────────────────────
+
+const key = todayKey();
+let dayData = loadDay(key);
+
+function renderMissions() {
+  const body = document.getElementById('missionBody');
+  const checkedCount = dayData.checked.length;
+
+  let html = `<div class="mission-limit-info">Sudah dipilih: <span>${checkedCount} / ${MAX_MISSIONS}</span></div>`;
+
+  MISSIONS.forEach(cat => {
+    html += `<div class="mission-category">`;
+    html += `<div class="category-label">${cat.category}</div>`;
+    cat.items.forEach(item => {
+      const isChecked = dayData.checked.includes(item);
+      const isDisabled = !isChecked && checkedCount >= MAX_MISSIONS;
+      const cls = [isChecked ? 'checked' : '', isDisabled ? 'disabled' : ''].join(' ').trim();
+      html += `
+        <div class="mission-item ${cls}" data-item="${item}">
+          <div class="mission-check">
+            <svg viewBox="0 0 10 8" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1,4 4,7 9,1"/>
+            </svg>
+          </div>
+          <div class="mission-label">${item}</div>
+        </div>`;
+    });
+    html += `</div>`;
+  });
+
+  body.innerHTML = html;
+
+  body.querySelectorAll('.mission-item:not(.disabled)').forEach(el => {
+    el.addEventListener('click', () => toggleMission(el.dataset.item));
+  });
+}
+
+function toggleMission(item) {
+  const idx = dayData.checked.indexOf(item);
+  if (idx > -1) {
+    dayData.checked.splice(idx, 1);
+  } else {
+    if (dayData.checked.length >= MAX_MISSIONS) return;
+    dayData.checked.push(item);
+  }
+  saveDay(key, dayData);
+  renderMissions();
+  renderSummary();
+  renderWeekly();
+}
+
+// ──────────────────────────────────────────
+// SUMMARY
+// ──────────────────────────────────────────
+
+function renderSummary() {
+  const count = dayData.checked.length;
+  document.getElementById('summaryCount').textContent = count;
+
+  const pct = (count / MAX_MISSIONS) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  const statusEl = document.getElementById('summaryStatus');
+  let label, cls;
+  if (count <= 1) { label = 'Light Day'; cls = 'status-light'; }
+  else if (count <= 3) { label = 'Productive Day'; cls = 'status-productive'; }
+  else { label = 'Excellent Day'; cls = 'status-excellent'; }
+
+  statusEl.textContent = label;
+  statusEl.className = `summary-status ${cls}`;
+}
+
+// ──────────────────────────────────────────
+// WEEKLY REPORT
+// ──────────────────────────────────────────
+
+function getLast7Days() {
+  const result = [];
+  const now = new Date();
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(now.getDate() - i);
+    result.push({ date: d, key: dateKey(d), day: DAYS_ID[d.getDay()] });
+  }
+  return result;
+}
+
+function getAllMissions() {
+  return MISSIONS.flatMap(c => c.items);
+}
+
+function renderWeekly() {
+  const body = document.getElementById('weeklyBody');
+  const days = getLast7Days();
+  const all = getAllMissions();
+
+  // collect data
+  let totalActivities = 0;
+  const perDay = days.map(d => {
+    const data = loadDay(d.key);
+    totalActivities += data.checked.length;
+    return { ...d, count: data.checked.length, checked: data.checked };
+  });
+
+  const avgPerDay = totalActivities / 7;
+
+  // frequency map
+  const freq = {};
+  all.forEach(m => freq[m] = 0);
+  perDay.forEach(d => d.checked.forEach(m => freq[m] = (freq[m]||0)+1));
+
+  const freqEntries = Object.entries(freq);
+  const mostFreq = freqEntries.reduce((a,b) => b[1]>a[1]?b:a, ['—',0]);
+  const leastFreq = freqEntries.filter(e=>e[1]>0).reduce((a,b) => b[1]<a[1]?b:a, ['—',Infinity]);
+
+  const mostProductiveDay = perDay.reduce((a,b) => b.count>a.count?b:a, perDay[0]);
+
+  // streak
+  let streak = 0;
+  for (let i = perDay.length - 1; i >= 0; i--) {
+    if (perDay[i].count >= 3) streak++;
+    else break;
+  }
+
+  // consistency rate = totalActivities / (7 * MAX_MISSIONS) * 100
+  const consistencyRate = ((totalActivities / (7 * MAX_MISSIONS)) * 100).toFixed(0);
+
+  // bar chart max
+  const barMax = Math.max(...perDay.map(d=>d.count), 1);
+
+  let html = `
+    <div class="streak-badge">
+      <span class="streak-fire">🔥</span>
+      <span>${streak} hari berturut-turut (&ge;3 aktivitas)</span>
+    </div>
+
+    <div class="weekly-grid">
+      <div class="weekly-stat">
+        <div class="weekly-stat-value">${totalActivities}</div>
+        <div class="weekly-stat-label">Total aktivitas</div>
+      </div>
+      <div class="weekly-stat">
+        <div class="weekly-stat-value">${avgPerDay.toFixed(1)}</div>
+        <div class="weekly-stat-label">Rata-rata / hari</div>
+      </div>
+      <div class="weekly-stat">
+        <div class="weekly-stat-value">${consistencyRate}%</div>
+        <div class="weekly-stat-label">Consistency rate</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="weekly-section-title">Aktivitas per Hari</div>
+    <div class="bar-chart">
+      ${perDay.map(d => {
+        const pct = barMax > 0 ? (d.count/barMax)*100 : 0;
+        return `
+          <div class="bar-row">
+            <div class="bar-label">${d.day.substring(0,3)}</div>
+            <div class="bar-track">
+              <div class="bar-fill ${pct===0?'is-zero':''}" style="width:${Math.max(pct,4)}%">
+                ${d.count > 0 ? d.count : ''}
+              </div>
+            </div>
+          </div>`;
+      }).join('')}
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="weekly-section-title">Detail Statistik</div>
+    <div class="weekly-text-stats">
+      <div class="wts-item">
+        <div class="wts-key">Paling sering</div>
+        <div class="wts-val">${mostFreq[1] > 0 ? mostFreq[0] : '—'} ${mostFreq[1]>0?'('+mostFreq[1]+'×)':''}</div>
+      </div>
+      <div class="wts-item">
+        <div class="wts-key">Paling jarang</div>
+        <div class="wts-val">${leastFreq[1] < Infinity ? leastFreq[0]+' ('+leastFreq[1]+'×)' : '—'}</div>
+      </div>
+      <div class="wts-item">
+        <div class="wts-key">Hari terbaik</div>
+        <div class="wts-val">${mostProductiveDay.day} (${mostProductiveDay.count} aktivitas)</div>
+      </div>
+      <div class="wts-item">
+        <div class="wts-key">Current streak</div>
+        <div class="wts-val">${streak} hari 🔥</div>
+      </div>
+    </div>
+  `;
+
+  body.innerHTML = html;
+}
+
+// ──────────────────────────────────────────
+// WEEKLY TOGGLE
+// ──────────────────────────────────────────
+
+function setupWeeklyToggle() {
+  const btn = document.getElementById('weeklyToggle');
+  const body = document.getElementById('weeklyBody');
+  let open = false;
+
+  btn.addEventListener('click', () => {
+    open = !open;
+    body.classList.toggle('open', open);
+    btn.classList.toggle('open', open);
+    btn.innerHTML = `${open ? 'Collapse' : 'Expand'} <span class="toggle-arrow">▾</span>`;
+  });
+}
+
+// ──────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────
+
+renderHeader();
+renderSchedule();
+renderMissions();
+renderSummary();
+renderWeekly();
+setupWeeklyToggle();
+</script>
+</body>
+</html>
